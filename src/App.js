@@ -7,73 +7,29 @@ import React from "react";
 
 
 function App() {
-  const [items, setItems] = React.useState([{
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   },
-   {
-    "author": "Molchat Doma",
-    "name": "Monument (Yellow Egg Drop Vinyl)",
-    "price": 29.99,
-    "img": "img/cards-img/1.jpg"
-   }
-  ]);
-  const [cartOpened, setCartOpened] = React.useState(false)
+  const [items, setItems] = React.useState([]);
+  const [cartItems, setCartItems] = React.useState([]);
+  const [cartOpened, setCartOpened] = React.useState(false);
+
+  React.useEffect(() => {
+    fetch('https://651051e03ce5d181df5d24cd.mockapi.io/items').then((response) => {
+      return response.json();
+    }).then(json => {
+      setItems(json);
+    });
+
+  }, []);
+
+  const onAddToCart = (obj) =>{
+    setCartItems(prev => [...prev, obj]);
+  };
+
+
 
   return (
     <div className="wrapper">
-      {cartOpened ? <Cart onClose={() => setCartOpened(false)} /> : null}
-      <Header onClickCart={() => setCartOpened(true)}/>
+      {cartOpened && <Cart items={cartItems} onClose={() => setCartOpened(false)} />}
+      <Header onClickCart={() => setCartOpened(true)} />
       <div className="content">
         <div className="content-header">
           <h1>All vinyl records</h1>
@@ -90,7 +46,8 @@ function App() {
               name={obj.name}
               price={obj.price}
               img={obj.img}
-              onClickPlus={() => console.log(obj)} />
+              onFavorite={() => console.log(obj)}
+              onClickPlus={onAddToCart} />
           ))}
 
         </div>
